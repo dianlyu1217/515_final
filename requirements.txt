@@ -3,6 +3,3 @@ speechRecognition
 pyttsx3
 pymysql
 python-dotenv
-lgpio
-gtts
-pyaudio
