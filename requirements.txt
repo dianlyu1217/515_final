@@ -3,4 +3,4 @@ speechRecognition
 pyttsx3
 pymysql
 python-dotenv
-openai
+openai==0.28

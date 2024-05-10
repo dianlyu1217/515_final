@@ -9,13 +9,13 @@ load_dotenv()
 openai.api_key = os.getenv('openai_key')
 
 sentence_system_msg = {"role": "system",
-                       "content": "我和朋友正在进行一场面试，之后会轮流输入说话的内容。每次我们一个人说完话之后，你需要做两件事：1.对我们说的内容产出一个20字以内的总结；2.从【自信、专业、傻瓜】这三个标签中选择一个最符合当前这段话的标签；3.你每次返回的格式必须符合模版并保持固定。样式为【总结：xxx，标签：xxx】",
+                       "content": "My friend and I were doing an interview, and we would take turns typing what we were going to say. Every time one of us finishes speaking, you need to do two things: 1. Produce a summary of what we said within 20 words; 2. Choose from the three tags [Pain Points, Needs, and Functionality] A tag that best fits the current paragraph; 3. The format you return each time must conform to the template and remain fixed. The style is [Summary: xxx, Label: xxx]",
                        }
 interview_system_msg = {"role": "system",
-                        "content": "我会传给你一段面试对话，你需要根据所有的对话内容给我返回一个100字数以内的总结"}
+                        "content": "I will send you an interview conversation, and you need to give me a summary within 100 words based on all the conversation content."}
 
 tag_system_msg = {"role": "system",
-                  "content": "我会传给你一段面试对话，并且每句话已经被打了相同的标签。你需要根据所有的对话内容给我返回一个100字数以内的总结"}
+                  "content": "I'll pass you an interview conversation, and each sentence has been tagged the same. You need to return to me a summary within 100 words based on all the conversation content."}
 
 
 def get_sentence_resp(origin_sentences: List[str]) -> Tuple[str, str]:
@@ -32,12 +32,17 @@ def get_sentence_resp(origin_sentences: List[str]) -> Tuple[str, str]:
         )
         chatgpt_reply = resp["choices"][0]["message"]["content"]
         print(chatgpt_reply)
-        tag_index = chatgpt_reply.find("标签:")
+
+        summary = chatgpt_reply.split("Summary: ")[1].split(", Label: ")[0]
+        label = chatgpt_reply.split("Label: ")[1]
+        return summary, label
+
+        # tag_index = chatgpt_reply.find("标签:")
         # 提取总结内容，假设总结部分总是从开始到“标签:”关键字前
-        ai_sentence = chatgpt_reply[3:tag_index].strip() if tag_index != -1 else chatgpt_reply[3:].strip()
+        # ai_sentence = chatgpt_reply[3:tag_index].strip() if tag_index != -1 else chatgpt_reply[3:].strip()
         # 提取标签内容，从“标签:”开始到字符串末尾
-        tag = chatgpt_reply[tag_index + 3:].strip() if tag_index != -1 else ""
-        return ai_sentence, tag
+        # tag = chatgpt_reply[tag_index + 3:].strip() if tag_index != -1 else ""
+        # return ai_sentence, tag
     except Exception as e:
         print("Failed to get response from OpenAI: " + str(e))
         return "Failed to get response from OpenAI: " + str(e), ''
