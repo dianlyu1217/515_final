@@ -3,3 +3,4 @@ speechRecognition
 pyttsx3
 pymysql
 python-dotenv
+openai
