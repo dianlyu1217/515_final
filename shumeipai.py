@@ -3,6 +3,7 @@ import pyttsx3
 import db
 import my_openai
 from typing import List
+import csv
 
 # 初始化 pyttsx3
 engine = pyttsx3.init()
@@ -17,8 +18,8 @@ engine.setProperty('voice', voices[0].id)  # 可以更换索引以选择不同�
 
 # 全局参数
 origin_sentences: List[str] = []
-manager = 'manager'
-candidate = 'candidate'
+manager = 'interviewer1'
+candidate = 'interviewer2'
 total_duration = 0
 cur_role = manager
 listening = True

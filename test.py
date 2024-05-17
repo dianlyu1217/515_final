@@ -3,11 +3,12 @@ import my_openai
 import db
 import os
 from typing import List
+import csv
 
 # 全局参数
 origin_sentences: List[str] = []
-manager = 'manager'
-candidate = 'candidate'
+manager = 'interviewer1'
+candidate = 'interviewer2'
 total_duration = 0
 cur_role = manager
 listening = True
@@ -52,8 +53,11 @@ def listen_and_respond(origin_sentence: str):
 if __name__ == "__main__":
     # 插入interview表
     interview_id = db.insert_interview(0, '', 0)
-    s = ["你好，请先做个自我介绍", "我叫apple，我在找sde工作", "你会java吗", "不会", "那你会什么",
-         "我擅长写ppt，曾经获得比赛第一名", "很好，你符合我们的要求，你被录用了", "谢谢", "stop listening"]
+    s = ["hi, please introduce yourself", "my name is Apple，I am a user of your application",
+         "do you have any suggestions for our software?",
+         "absolutely yes, your application is so ugly ans speed is so slow",
+         "are there any new features you’d like to see",
+         "i hope your application can have an ai assistant", "ok, we will develop that, thank you", "stop listening"]
     i = 0
     # 循环处理音频
     while listening:
