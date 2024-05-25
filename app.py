@@ -1,13 +1,31 @@
 import streamlit as st
 import db
 import my_openai
+import base64
 
+# def encode_image(image_path):
+#     with open(image_path, "rb") as img_file:
+#         return base64.b64encode(img_file.read()).decode()
+#
+# bg_image_base64 = encode_image("image2.jpg")
+#
+# st.markdown(f'''
+#         <style>
+#             [data-testid="stAppViewContainer"] > .main  {{
+#                 background-image: url("data:image/png;base64,{bg_image_base64}");
+#                 # background-color: black;
+#                 background-size: 100% 100%;
+#                 background-repeat: no-repeat;
+#                 background-position: top center;
+#                 background-attachment: local;
+#             }}
+#         </style>
+#         ''', unsafe_allow_html=True)
 
 def select_interview() -> int:
     if 'selected_interview' not in st.session_state or not st.session_state['selected_interview']:
         return 0
     return st.session_state['selected_interview']
-
 
 def display_data_by_interview(interview_id: int):
     interview = db.get_interview_data(interview_id)
@@ -26,7 +44,6 @@ def display_data_by_interview(interview_id: int):
         st.write(f"Original Sentence: {sentence.origin_sentence}")
         st.write(f"Key Words: {sentence.ai_sentence}")
         st.write("")
-
 
 def display_interview_dimension(interview_id: int):
     if st.sidebar.button("Return", key='goback_project'):
@@ -50,8 +67,8 @@ def display_interview_dimension(interview_id: int):
         st.experimental_rerun()
     display_data_by_interview(interview_options[selected_interview])
 
-
 def display_data_by_project(project_id: int):
+    st.image("image2.jpg", width=400)
     interviews = db.get_project_data(project_id)
     labels = {}
     # 聚合标签数据
@@ -86,7 +103,6 @@ def display_data_by_project(project_id: int):
                 st.session_state['selected_project'] = project_id
                 st.experimental_rerun()
 
-
 def display_project_dimension():
     st.sidebar.title("Project Selection")
     projects = db.get_all_projects()
@@ -107,7 +123,6 @@ def display_project_dimension():
         st.session_state['selected_project'] = project_options[selected_project]
         st.experimental_rerun()
     display_data_by_project(project_options[selected_project])
-
 
 if __name__ == "__main__":
     interview_id = select_interview()
