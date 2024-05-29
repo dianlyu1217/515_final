@@ -11,8 +11,13 @@ import csv
 load_dotenv()
 openai.api_key = os.getenv('openai_key')
 label_sample = []
-sentence_system_msg = {"role": "system",
-                       "content": "I'm doing an interview with a friend and I'm going to upload something a person said recently. First you have to study the example I gave you earlier, which shows which types of words should be labeled with which ones. What you need to do next is: 1. Generate a summary of less than 20 words based on this paragraph. 2. Based on what you have learned and your own understanding, generate the appropriate label for this paragraph, the label can only be selected from the previous examples. Note that I'm not talking to you, you just return what I need as requested. The format of the returned content must be in the format of Summary: xxx, Label: xxx", }
+sentence_system_msg = {"role": "system", "content": """We are conducting a series of user interviews for user research to understand the needs and satisfaction levels of users with our product. You don't need to answer any questions; you just need to record what people say and tag each statement with a label. The labels include: Need/Expectations, Pain point, Functionality/Features, scenario (when/how/who/where/frequency), attitude (positive/negative), no label. Use the 'no label' tag when a statement doesn't fit any of the categories. Also, you must learn from the examples I've given you previously—not the specific content, but how to apply the labels.
+Next, what you need to do is:
+1. Display the content of the speech-to-text you hear;
+2. Generate the appropriate label for the statement, choosing only from the labels I've provided;
+3. After each statement, summarize all the content including that statement in a summary no longer than 35 words.
+Please note: I'm not talking to you, so you don't need to respond; you just need to return the information I need in the format: 'Sentence: xxx, Summary: xxx, Label: xxx'.
+"""}
 sentence_summary_system_msg = {"role": "system", "content": "Generate a summary of less than 30 words based on our conversation below"}
 interview_system_msg = {"role": "system", "content": "I will send you an interview conversation, and you need to give me a summary within 100 words based on all the conversation content."}
 
@@ -104,3 +109,18 @@ def get_summary(origin_sentences: List[str]) -> str:
     except Exception as e:
         print("Failed to get response from OpenAI: " + str(e))
         return ''
+
+
+def get_chatbox_resp(origin_sentences: List[str], question: str) -> str:
+    try:
+        chatbox_msg = []
+        for origin_sentence in origin_sentences:
+            chatbox_msg.append({"role": "user", "content": origin_sentence})
+        chatbox_msg.append({"role": "system", "content": "I have sent you all of the conversations of different interviews, please use less than 20 word to answer: " + question})
+        resp = openai.ChatCompletion.create(model="gpt-3.5-turbo", messages=chatbox_msg)
+        sentence_summary = resp["choices"][0]["message"]["content"]
+        print(sentence_summary)
+        return sentence_summary
+    except Exception as e:
+        print("Failed to get response from OpenAI: " + str(e))
+        return 'Sorry I can not answer your, try another question!'
