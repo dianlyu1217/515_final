@@ -88,6 +88,8 @@ def recognize_speech():
     with mic as source:
         recognizer.adjust_for_ambient_noise(source)
         global interview_id
+        global total_duration
+        global origin_sentences
         interview_id = db.insert_interview(0, '', 0)
         while nfc_activated:
             listening_label.place(x=width - 220, y=20)  # Listening 状态标签位置
@@ -104,7 +106,6 @@ def recognize_speech():
                 db.insert_sentence(sentence)
                 # change variable
                 origin_sentences.append(origin_sentence)
-                global total_duration
                 total_duration = total_duration + duration
                 display_speech_text(cur_role + ': ' + origin_sentence)
                 change_role()
