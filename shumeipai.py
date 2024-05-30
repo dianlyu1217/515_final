@@ -32,6 +32,10 @@ def change_role():
         cur_role = interviewer1
 
 
+def update_sentence_summary():
+    summary_text = my_openai.get_summary(origin_sentences) if origin_sentences else "Waiting for data..."
+    hello_label.config(text=summary_text)
+
 def setup_gpio():
     GPIO.setwarnings(False)
     if GPIO.getmode() is None or GPIO.getmode() != GPIO.BCM:
@@ -109,6 +113,7 @@ def recognize_speech():
                 total_duration = total_duration + duration
                 display_speech_text(cur_role + ': ' + origin_sentence)
                 change_role()
+                update_sentence_summary()
             except sr.UnknownValueError:
                 print("Unable to recognize audio")
             except sr.RequestError as e:
@@ -184,7 +189,7 @@ width = 1280  # 显示器的宽度
 height = 720  # 显示器的高度
 place_window(root, width, height)
 
-hello_label = tk.Label(root, text=my_openai.get_summary(origin_sentences), font=("Helvetica", 40), anchor='w', bg="black", fg="white", wraplength=300)
+hello_label = tk.Label(root, text='Waiting for Data...', font=("Helvetica", 40), anchor='w', bg="black", fg="white", wraplength=300)
 hello_label.place_forget()
 
 timer_label = tk.Label(root, text="00:00:00", font=("Helvetica", 40), bg="black", fg="white")
