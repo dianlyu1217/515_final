@@ -135,7 +135,8 @@ def display_data_by_project(project_id: int, interviews: list[db.InterviewData])
             st.divider()
             st.subheader("Label Summary: ")
             # 实时调用openai处理
-            # st.write(my_openai.get_tag_summary(sentences)) #todo 打开
+            if st.button('Generate Summary', key='gen_summary'+label):
+                st.write(my_openai.get_tag_summary(sentences))
             st.divider()
             st.subheader("Sentences：")
             for sentence in sentences:
