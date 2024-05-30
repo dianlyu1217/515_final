@@ -2,7 +2,7 @@ import streamlit as st
 import db
 import my_openai
 
-st.set_page_config(page_title="Insight Pulse", page_icon="🦊", layout="wide")
+st.set_page_config(page_title="Insightify", page_icon="🦊", layout="wide")
 
 st.markdown("""
     <style>
@@ -135,7 +135,7 @@ def display_data_by_project(project_id: int, interviews: list[db.InterviewData])
             st.divider()
             st.subheader("Label Summary: ")
             # 实时调用openai处理
-            st.write(my_openai.get_tag_summary(sentences))
+            # st.write(my_openai.get_tag_summary(sentences)) #todo 打开
             st.divider()
             st.subheader("Sentences：")
             for sentence in sentences:
@@ -156,7 +156,7 @@ def display_data_by_project(project_id: int, interviews: list[db.InterviewData])
 
 
 def display_project_dimension():
-    st.title("🦊 Insight Pulse")
+    st.title("🦊 Insightify")
     st.subheader("Product Introduction")
     st.write(
         "👋 Insightpulse is a software and hardware integrated AI assistant designed for user interviews. The hardware aids user researchers by providing real-time feedback during the interview process, including content summaries, follow-up question suggestions, and time tracking. After the interview, users can quickly access the project and interview records, along with valuable insights, through this website.")
@@ -183,7 +183,7 @@ def display_project_dimension():
             if value == selected_project_id:  # 直接比较值
                 default_idx = idx
                 break
-    selected_project = st.sidebar.radio("Choose a project:", list(project_options.keys()), index=default_idx, format_func=lambda x: x)  # todo：改project name
+    selected_project = st.sidebar.radio("Choose a project:", list(project_options.keys()), index=default_idx, format_func=lambda x: x)
     if project_options[selected_project] != selected_project_id:
         st.session_state['selected_project'] = project_options[selected_project]
         st.experimental_rerun()

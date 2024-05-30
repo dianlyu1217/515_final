@@ -104,6 +104,7 @@ def recognize_speech():
                 db.insert_sentence(sentence)
                 # change variable
                 origin_sentences.append(origin_sentence)
+                global total_duration
                 total_duration = total_duration + duration
                 display_speech_text(cur_role + ': ' + origin_sentence)
                 change_role()
@@ -182,7 +183,7 @@ width = 1280  # 显示器的宽度
 height = 720  # 显示器的高度
 place_window(root, width, height)
 
-hello_label = tk.Label(root, text=my_openai.get_summary(origin_sentences), font=("Helvetica", 40), anchor='center', bg="black", fg="white")
+hello_label = tk.Label(root, text=my_openai.get_summary(origin_sentences), font=("Helvetica", 40), anchor='center', bg="black", fg="white", wraplength=300)
 hello_label.place_forget()
 
 timer_label = tk.Label(root, text="00:00:00", font=("Helvetica", 40), bg="black", fg="white")
