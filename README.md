@@ -1,5 +1,5 @@
-# 515_final
-[1.Name of your project]
+# 515_final  
+1.Name of your project  
 Insightify
 
 2.A single sentence to impress me about your project
